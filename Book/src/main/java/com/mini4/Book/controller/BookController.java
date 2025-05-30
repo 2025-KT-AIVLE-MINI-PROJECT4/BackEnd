@@ -27,7 +27,7 @@ public class BookController {
         return getSampleBooks();
     }
 
-    // 도서 상세 조회 api get 이랑 /books/{id}
+    // 도서  조회 api get 이랑 /books/{id}
     @GetMapping("/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
         return getSampleBooks().stream()

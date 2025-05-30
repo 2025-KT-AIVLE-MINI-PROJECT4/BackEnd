@@ -6,7 +6,7 @@ public class BookDto {
     private String title;
     private String author;
 
-    public BookDto() {} // 생성자 만들어두기?
+    public BookDto() {} // 생성자
 
     public BookDto(Long id, String title, String author) {
         this.id = id;
