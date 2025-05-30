@@ -1,13 +1,16 @@
 package com.mini4.Book.dto;
 
-import java.time.LocalDate;
+import lombok.Data;
 
+import java.time.LocalDateTime;
+
+@Data
 public class BookRegisterRequestDto {
     private Long userId;
     private String title;
     private String author;
     private String publisher;
-    private LocalDate publishedDate;
+    private LocalDateTime publishedDate;
     private String content;
     private int price;
     private String category;
