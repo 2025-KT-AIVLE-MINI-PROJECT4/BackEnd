@@ -21,13 +21,13 @@ public class BookController {
         );
     }
 
-    // 도서 목록 조회를 get 이랑 books
+    // 도서목록 조회    get 이랑 books
     @GetMapping
     public List<BookDto> getBooks() {
         return getSampleBooks();
     }
 
-    // 도서  조회 api get 이랑 /books/{id}
+    // 도서조회 api    get 이랑 /books/{id}
     @GetMapping("/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
         return getSampleBooks().stream()
