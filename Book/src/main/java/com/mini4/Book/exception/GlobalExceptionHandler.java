@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserExistsException.class)
     public ResponseEntity<ApiResponse<Void>> handleUserExistsException(UserExistsException ex, WebRequest request) {
         return new ResponseEntity<>(
-                ApiResponse.error(ex.getMessage()), // [cite: 2]
+                ApiResponse.error(ex.getMessage()),
                 HttpStatus.BAD_REQUEST
         );
     }
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class) // 예시로 IllegalArgumentException 사용. 더 구체적인 DTO 유효성 검증 예외를 사용할 수 있습니다.
     public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
         return new ResponseEntity<>(
-                ApiResponse.error(ex.getMessage()), // [cite: 12]
+                ApiResponse.error(ex.getMessage()),
                 HttpStatus.BAD_REQUEST
         );
     }
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({InvalidCredentialsException.class, UnauthorizedException.class})
     public ResponseEntity<ApiResponse<Void>> handleAuthenticationException(RuntimeException ex, WebRequest request) {
         return new ResponseEntity<>(
-                ApiResponse.error(ex.getMessage()), // [cite: 4, 7]
+                ApiResponse.error(ex.getMessage()),
                 HttpStatus.UNAUTHORIZED
         );
     }
