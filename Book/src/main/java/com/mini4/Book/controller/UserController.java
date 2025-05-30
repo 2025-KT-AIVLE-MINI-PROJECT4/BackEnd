@@ -2,10 +2,9 @@ package com.mini4.Book.controller;
 
 import com.mini4.Book.dto.ApiResponse;
 import com.mini4.Book.dto.LoginRequestDto;
-import com.mini4.Book.dto.RegisterRequestDto;
+import com.mini4.Book.dto.UserRegisterRequestDto;
 import com.mini4.Book.dto.UserDto;
 import com.mini4.Book.service.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class UserController {
 
     // 이메일 회원가입
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserDto>> register(@RequestBody RegisterRequestDto request) {
+    public ResponseEntity<ApiResponse<UserDto>> register(@RequestBody UserRegisterRequestDto request) {
         UserDto registeredUser = userService.registerUser(request);
         return new ResponseEntity<>(
                 ApiResponse.success("회원가입 성공", registeredUser),

@@ -2,7 +2,7 @@ package com.mini4.Book.service.impl;
 
 import com.mini4.Book.domain.User;
 import com.mini4.Book.dto.LoginRequestDto;
-import com.mini4.Book.dto.RegisterRequestDto;
+import com.mini4.Book.dto.UserRegisterRequestDto;
 import com.mini4.Book.dto.UserDto;
 import com.mini4.Book.exception.InvalidCredentialsException;
 import com.mini4.Book.exception.ResourceNotFoundException;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto registerUser(RegisterRequestDto request) {
+    public UserDto registerUser(UserRegisterRequestDto request) {
         // 이메일 중복 체크
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new UserExistsException("이미 존재하는 이메일입니다.");
