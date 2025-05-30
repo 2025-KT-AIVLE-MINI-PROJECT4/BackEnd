@@ -1,4 +1,4 @@
-package com.mini4.Book.securtiy;
+package com.mini4.Book.security;
 
 import com.mini4.Book.domain.User;
 import lombok.Getter;

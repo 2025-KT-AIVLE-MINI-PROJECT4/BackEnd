@@ -1,6 +1,5 @@
 package com.mini4.Book.jwt;
 
-import com.mini4.Book.securtiy.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

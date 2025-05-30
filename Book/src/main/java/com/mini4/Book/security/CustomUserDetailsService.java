@@ -1,7 +1,6 @@
-package com.mini4.Book.securtiy;
+package com.mini4.Book.security;
 
 import com.mini4.Book.domain.User;
-import com.mini4.Book.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

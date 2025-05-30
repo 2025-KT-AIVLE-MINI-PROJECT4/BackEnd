@@ -6,7 +6,7 @@ import com.mini4.Book.dto.UserRegisterRequestDto;
 import com.mini4.Book.dto.UserDto;
 import com.mini4.Book.jwt.JwtAuthenticationFilter;
 import com.mini4.Book.jwt.JwtTokenProvider;
-import com.mini4.Book.securtiy.CustomUserDetails;
+import com.mini4.Book.security.CustomUserDetails;
 import com.mini4.Book.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
