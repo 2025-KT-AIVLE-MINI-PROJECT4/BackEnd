@@ -1,7 +1,7 @@
 package com.mini4.Book.service;
 
 import com.mini4.Book.domain.*;
-import com.mini4.Book.dto.RegisterRequestDto;
+import com.mini4.Book.dto.BookRegisterRequestDto;
 import com.mini4.Book.exception.ResourceNotFoundException;
 import com.mini4.Book.repository.BookRepository;
 import com.mini4.Book.repository.UserRepository;
@@ -19,7 +19,7 @@ public class BookService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long register(RegisterRequestDto dto) {
+    public Long register(BookRegisterRequestDto dto) {
         User user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new ResourceNotFoundException());
 
         Book book = Book.builder()
