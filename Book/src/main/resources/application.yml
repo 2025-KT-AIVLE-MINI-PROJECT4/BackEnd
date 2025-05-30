@@ -12,4 +12,17 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
+  data:
+    redis:
+      port: 6379
+      host: localhost
+jwt:
+  secret: ODQ0NzQwMzY5MjI1Mzk3YTZlYjAwY2ZhOTFhOTc0MDYzY2Q5Yzc4YzlmNjI1YjAwMDFlMjFlNzY0MmY5YTM2Mg==
+logging:
+  level:
+    org.springframework.security: DEBUG
+    # JWT ?? ???? ?? ??? (?: com.example.yourproject.jwt)
+    com.mini4.Book.jwt: DEBUG
+    # UserService, UserController ? ???? ?? ???? DEBUG? ???? ????.
+    com.mini4.Book.service: DEBUG
+    com.mini4.Book.controller: DEBUG

@@ -7,23 +7,41 @@ import com.mini4.Book.dto.UserDto;
 import com.mini4.Book.exception.InvalidCredentialsException;
 import com.mini4.Book.exception.ResourceNotFoundException;
 import com.mini4.Book.exception.UserExistsException;
+import com.mini4.Book.jwt.JwtTokenProvider;
 import com.mini4.Book.repository.UserRepository;
+import com.mini4.Book.securtiy.CustomUserDetails;
 import com.mini4.Book.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; // 비밀번호 암호화 주입
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                           JwtTokenProvider jwtTokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder,
+                           RedisTemplate<String, Object> redisTemplate) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -53,35 +71,56 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public UserDto loginUser(LoginRequestDto request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new InvalidCredentialsException("잘못된 사용자 이름 또는 비밀번호입니다."));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // 비밀번호 일치 여부 확인
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new InvalidCredentialsException("잘못된 사용자 이름 또는 비밀번호입니다.");
-        }
+        String accessToken = jwtTokenProvider.generateToken(authentication);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(authentication);
 
-        // TODO: 실제 JWT 토큰 발급 로직 필요 (여기서는 더미 토큰)
-        String accessToken = "jwt_token_string"; // 실제 JWT 생성 로직 필요
-        String refreshToken = "jwt_refresh_token_string"; // 실제 JWT 생성 로직 필요
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId();
+        String refreshTokenKey = "RT:" + userId;
+        redisTemplate.opsForValue().set(refreshTokenKey, refreshToken, 7 * 24 * 60 * 60 * 1000L, TimeUnit.MILLISECONDS);
 
         return UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
+                .id(userId)
+                .name(userDetails.getUserName())
+                .email(userDetails.getUsername())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
 
     @Override
-    public void logoutUser(Long userId) {
-        // TODO: 실제 JWT 토큰 무효화 또는 세션 관리 로직이 필요
-        // ex) Redis에 블랙리스트 토큰 저장 또는 세션 만료 등
-        // 여기서는 단순히 성공 메시지를 반환하는 것으로 가정
-        // 사용자 ID가 존재하는지 확인하는 로직은 선택 사항
-        userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("로그아웃할 사용자를 찾을 수 없습니다."));
+    @Transactional
+    public void logoutUser(Long userId, String accessToken) { // accessToken 파라미터 추가
+        // 1. Redis에서 Refresh Token 삭제
+        String refreshTokenKey = "RT:" + userId;
+        if (redisTemplate.hasKey(refreshTokenKey)) {
+            redisTemplate.delete(refreshTokenKey);
+        } else {
+            // Refresh Token이 없거나 이미 삭제된 경우 (예: 이미 로그아웃)
+            // throw new ResourceNotFoundException("로그아웃할 Refresh Token을 찾을 수 없습니다."); // 필요에 따라 예외 처리
+            // 보통은 이미 로그아웃된 상태로 간주하고 경고 로그만 남김
+            System.out.println("Warning: Refresh Token not found for userId: " + userId + ". Possibly already logged out.");
+        }
+
+        // 2. Access Token 블랙리스트 처리
+        // Access Token이 유효한 경우에만 블랙리스트에 추가
+        if (StringUtils.hasText(accessToken) && jwtTokenProvider.validateToken(accessToken)) {
+            Long expiration = jwtTokenProvider.getExpiration(accessToken); // AccessToken의 남은 만료 시간 (ms)
+            if (expiration > 0) { // 만료되지 않은 토큰만 블랙리스트에 추가
+                redisTemplate.opsForValue().set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
+                System.out.println("Access Token (ID: " + jwtTokenProvider.parseClaims(accessToken).getSubject() + ") blacklisted for " + expiration + "ms.");
+            }
+        } else {
+            System.out.println("Warning: No valid Access Token provided for logout or token already expired/invalid.");
+        }
+
+        // 3. SecurityContext 클리어
+        SecurityContextHolder.clearContext();
     }
 }
+
