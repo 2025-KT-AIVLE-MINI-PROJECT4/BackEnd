@@ -29,10 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto registerUser(RegisterRequestDto request) {
-        // 이름 또는 이메일 중복 체크
-        if (userRepository.existsByName(request.getName())) {
-            throw new UserExistsException("이미 존재하는 사용자 이름입니다.");
-        }
+        // 이메일 중복 체크
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new UserExistsException("이미 존재하는 이메일입니다.");
         }
@@ -66,7 +63,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException("잘못된 사용자 이름 또는 비밀번호입니다.");
         }
 
-        // 실제 JWT 토큰 발급 로직 필요 (여기서는 더미 토큰)
+        // TODO: 실제 JWT 토큰 발급 로직 필요 (여기서는 더미 토큰)
         String accessToken = "jwt_token_string"; // 실제 JWT 생성 로직 필요
         String refreshToken = "jwt_refresh_token_string"; // 실제 JWT 생성 로직 필요
 
@@ -80,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logoutUser(Long userId) {
-        // 실제 JWT 토큰 무효화 또는 세션 관리 로직이 필요
+        // TODO: 실제 JWT 토큰 무효화 또는 세션 관리 로직이 필요
         // ex) Redis에 블랙리스트 토큰 저장 또는 세션 만료 등
         // 여기서는 단순히 성공 메시지를 반환하는 것으로 가정
         // 사용자 ID가 존재하는지 확인하는 로직은 선택 사항
