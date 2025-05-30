@@ -23,6 +23,7 @@ public class BookResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String authorName; // 책을 등록한 사용자 이름 (User 엔티티에서 가져옴)
+    private Long authorId;     // 책을 등록한 사용자 ID
     private LocalDateTime deletedAt; // Soft Delete용 필드
 
     public BookResponseDto(Book book) {
@@ -38,6 +39,7 @@ public class BookResponseDto {
         this.createdAt = book.getCreatedAt();
         this.updatedAt = book.getUpdatedAt();
         this.authorName = book.getUser() != null ? book.getUser().getName() : "Unknown";
+        this.authorId = book.getUser() != null ? book.getUser().getId() : null;
         this.deletedAt = book.getDeletedAt();
     }
 }
