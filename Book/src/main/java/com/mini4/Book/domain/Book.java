@@ -34,7 +34,7 @@ public class Book {
     private String publishedDate; // YYYY-MM-DD 형식으로 저장 (String)
 
     @Column(columnDefinition = "TEXT") // 긴 텍스트 저장을 위해 TEXT 타입으로
-    private String content; // GPT 이미지 생성시 사용
+    private String content;
 
     @Column
     private Integer price; // int 대신 Integer를 사용하여 null 허용
@@ -42,7 +42,7 @@ public class Book {
     @Column
     private String category;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", length = 1024)
     private String imageUrl;
 
     @Column(nullable = false, updatable = false)

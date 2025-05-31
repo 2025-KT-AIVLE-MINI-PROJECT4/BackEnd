@@ -19,8 +19,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-@Slf4j // Lombok을 이용한 로깅
-@Component // 스프링 빈으로 등록
+@Slf4j
+@Component
 public class JwtTokenProvider {
 
     private final Key key; // JWT 서명에 사용할 키

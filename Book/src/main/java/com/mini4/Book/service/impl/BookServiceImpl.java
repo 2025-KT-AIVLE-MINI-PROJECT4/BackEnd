@@ -18,9 +18,9 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Service // @Service 어노테이션을 구현체에 추가
+@Service
 @RequiredArgsConstructor
-public class BookServiceImpl implements BookService { // BookService 인터페이스 구현
+public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
@@ -31,20 +31,22 @@ public class BookServiceImpl implements BookService { // BookService 인터페�
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다. User ID: " + userId));
 
+        log.info("createBook: Received imageUrl: {}", requestDto.getImageUrl());
+
         Book book = Book.builder()
                 .title(requestDto.getTitle())
                 .author(requestDto.getAuthor())
                 .publisher(requestDto.getPublisher())
                 .publishedDate(requestDto.getPublishedDate())
                 .content(requestDto.getContent())
-                .price(requestDto.getPrice()) // price는 null이 될 수 있음
+                .price(requestDto.getPrice())
                 .category(requestDto.getCategory())
                 .imageUrl(requestDto.getImageUrl())
                 .user(user)
                 .build();
 
         Book savedBook = bookRepository.save(book);
-        log.info("Book created: {}", savedBook.getTitle());
+        log.info("Book created: {} with URL: {}", savedBook.getTitle(), savedBook.getImageUrl());
         return new BookResponseDto(savedBook);
     }
 
@@ -81,18 +83,24 @@ public class BookServiceImpl implements BookService { // BookService 인터페�
             throw new AccessDeniedException("도서를 수정할 권한이 없습니다.");
         }
 
+        log.info("updateBook: Book ID {}, Current imageUrl: {}, Received imageUrl: {}",
+                bookId, book.getImageUrl(), requestDto.getImageUrl());
+
         book.update(
                 requestDto.getTitle(),
                 requestDto.getAuthor(),
                 requestDto.getPublisher(),
                 requestDto.getPublishedDate(),
                 requestDto.getContent(),
-                requestDto.getPrice(), // price는 null이 될 수 있음
+                requestDto.getPrice(),
                 requestDto.getCategory(),
                 requestDto.getImageUrl()
         );
 
-        log.info("Book updated: {}", book.getTitle());
+        // 변경된 내용을 DB에 저장
+        bookRepository.save(book);
+
+        log.info("Book updated: {} with URL: {}", book.getTitle(), book.getImageUrl()); // URL 로깅 추가
         return new BookResponseDto(book);
     }
 

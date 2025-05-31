@@ -60,7 +60,6 @@ public class UserController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             HttpServletRequest request
     ) {
-        // customUserDetails의 null 여부를 직접 로그로 확인
         if (customUserDetails == null) {
             log.warn("UserController.logout: customUserDetails가 null입니다. 인증 정보 없음."); // 추가
             return new ResponseEntity<>(

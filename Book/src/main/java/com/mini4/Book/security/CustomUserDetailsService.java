@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor // Lombok: final 필드를 위한 생성자 자동 생성
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final com.mini4.Book.repository.UserRepository userRepository;

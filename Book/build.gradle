@@ -41,13 +41,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	// MinIO 클라이언트
-	implementation 'io.minio:minio:8.5.10'
-	// IDE에서 minio 설정 관련 자동 완성을 도와줌
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	// Validation (선택 사항, 입력 값 유효성 검사)
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-
 }
 
 tasks.named('test') {

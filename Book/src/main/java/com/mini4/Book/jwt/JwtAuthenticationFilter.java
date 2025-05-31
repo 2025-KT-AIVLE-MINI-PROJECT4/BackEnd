@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j; // Slf4j 어노테이션 확인
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Slf4j // 이 어노테이션이 있어야 log 객체를 사용할 수 있습니다.
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -30,11 +30,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String requestURI = request.getRequestURI(); // 현재 요청 URI 로깅
 
-        log.debug("===== JwtAuthenticationFilter : Request URI [{}] =====", requestURI); // 추가
+        log.debug("===== JwtAuthenticationFilter : Request URI [{}] =====", requestURI);
 
         // 1. Request Header에서 토큰 추출
         String token = resolveToken(request);
-        log.debug("Extracted token from header: {}", StringUtils.hasText(token) ? "Token Found" : "No Token"); // 추가
+        log.debug("Extracted token from header: {}", StringUtils.hasText(token) ? "Token Found" : "No Token");
         if (StringUtils.hasText(token)) {
             log.debug("Token Start: {}, Token End: {}", token.substring(0, Math.min(token.length(), 20)), token.substring(Math.max(0, token.length() - 20))); // 토큰 앞/뒤 일부 로깅
         }
@@ -45,19 +45,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가져와 SecurityContext에 저장
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, URI: {}", authentication.getName(), requestURI); // 추가
+            log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, URI: {}", authentication.getName(), requestURI);
         } else {
             if (StringUtils.hasText(token)) { // 토큰은 있지만 유효하지 않은 경우
-                log.debug("유효하지 않은 JWT 토큰입니다. 토큰: {}", token); // 추가
+                log.debug("유효하지 않은 JWT 토큰입니다. 토큰: {}", token);
             } else { // 토큰이 아예 없는 경우
-                log.debug("요청에 JWT 토큰이 없습니다. URI: {}", requestURI); // 추가
+                log.debug("요청에 JWT 토큰이 없습니다. URI: {}", requestURI);
             }
         }
 
         filterChain.doFilter(request, response); // 다음 필터로 요청 전달
     }
 
-    // Request Header에서 토큰 정보 추출 (이전과 동일)
+    // Request Header에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {

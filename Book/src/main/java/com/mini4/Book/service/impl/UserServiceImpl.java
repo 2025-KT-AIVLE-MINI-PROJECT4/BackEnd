@@ -49,6 +49,10 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new UserExistsException("이미 존재하는 이메일입니다.");
         }
+        // 이름 중복 체크
+        if (userRepository.existsByName(request.getName())) {
+            throw new UserExistsException("이미 존재하는 이름입니다.");
+        }
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -99,9 +103,6 @@ public class UserServiceImpl implements UserService {
         if (redisTemplate.hasKey(refreshTokenKey)) {
             redisTemplate.delete(refreshTokenKey);
         } else {
-            // Refresh Token이 없거나 이미 삭제된 경우 (예: 이미 로그아웃)
-            // throw new ResourceNotFoundException("로그아웃할 Refresh Token을 찾을 수 없습니다."); // 필요에 따라 예외 처리
-            // 보통은 이미 로그아웃된 상태로 간주하고 경고 로그만 남김
             System.out.println("Warning: Refresh Token not found for userId: " + userId + ". Possibly already logged out.");
         }
 

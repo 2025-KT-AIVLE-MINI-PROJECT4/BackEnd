@@ -28,11 +28,3 @@ logging:
     com.mini4.Book.jwt: DEBUG
     com.mini4.Book.service: DEBUG
     com.mini4.Book.controller: DEBUG
-
-minio:
-  url: http://localhost:9000
-  access-key: minioadmin     # MinIO 초기 설정 시 사용한 Access Key
-  secret-key: minioadmin     # MinIO 초기 설정 시 사용한 Secret Key
-  bucket-name: book-images   # 이미지를 저장할 버킷 이름
-  public-url-prefix: http://localhost:9000/book-images/ # MinIO 퍼블릭 URL 접두사 (이미지 접근 시 사용)
-  max-file-size: 10MB # 파일 크기 제한 (예: 10MB)
