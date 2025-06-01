@@ -12,7 +12,7 @@
 ## 💻 기술 스택
 
 * **언어:** Java 17
-* **프레임워크:** Spring Boot 3.4.6
+* **프레임워크:** Spring Boot 3.x
 * **데이터베이스:** H2 Database (개발용, 인메모리)
 * **ORM:** Spring Data JPA
 * **보안:** Spring Security, JWT (Json Web Token)
@@ -81,6 +81,29 @@ src
 1.  **JDK 17 설치:** Java Development Kit 17 버전 이상이 설치되어 있어야 합니다.
 2.  **Gradle 설정:** 프로젝트는 Gradle을 빌드 도구로 사용합니다.
 3.  **Redis 설치 및 실행:** Redis 서버가 로컬에 설치 및 실행되어 있어야 합니다. `application.yml`에 설정된 `host`와 `port` (기본 `localhost:6379`)로 접속합니다.
+    * **Windows 사용자 (WSL 권장):**
+        1.  **WSL 설치:**
+            * 관리자 권한으로 PowerShell 또는 명령 프롬프트를 열고 다음 명령어를 실행합니다:
+                ```bash
+                wsl --install
+                ```
+            * 컴퓨터 재부팅 후, Linux 배포판 (Ubuntu가 기본) 설치가 진행됩니다. 사용자 이름과 비밀번호를 설정합니다.
+        2.  **Redis 설치 (WSL 내부):**
+            * WSL 터미널을 열고 다음 명령어를 실행하여 Redis를 설치합니다:
+                ```bash
+                sudo apt update
+                sudo apt install redis-server
+                ```
+        3.  **Redis 서비스 시작:**
+            * Redis 서비스를 시작합니다:
+                ```bash
+                sudo service redis-server start
+                ```
+            * (선택) Redis 서비스 상태 확인:
+                ```bash
+                sudo service redis-server status
+                ```
+            * WSL을 재시작할 때마다 `sudo service redis-server start` 명령어를 실행하여 Redis 서버를 수동으로 시작해야 합니다.
 4.  **환경 변수 설정:**
     * `src/main/resources/application.yml` 파일에 다음 내용이 올바르게 설정되어 있는지 확인합니다.
         ```yaml
