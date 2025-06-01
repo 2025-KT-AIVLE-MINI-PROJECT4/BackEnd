@@ -141,18 +141,23 @@ src
 ```bash
 ./gradlew bootRun
 또는 IDE (IntelliJ IDEA 등)에서 BookApplication.java 파일을 직접 실행할 수도 있습니다.
+```
 
 애플리케이션은 기본적으로 http://localhost:8080 포트에서 실행됩니다.
 
-🔑 API 엔드포인트 (주요 API)
-인증 및 사용자:
+## 🔑 API 엔드포인트 (주요 API)
+* 인증 및 사용자:
+```
 POST /api/v1/auth/register : 사용자 회원가입
 POST /api/v1/auth/login : 사용자 로그인 (JWT 토큰 발급)
-도서 관리:
+```
+* 도서 관리:
+```
 POST /api/v1/books : 새 도서 등록 (인증 필요)
 GET /api/v1/books/{id} : 특정 도서 조회
 GET /api/v1/books : 모든 도서 목록 조회
 GET /api/v1/books/my : 로그인한 사용자가 등록한 도서 목록 조회 (인증 필요)
 PUT /api/v1/books/{id} : 도서 정보 수정 (인증 및 도서 소유자만 가능)
 DELETE /api/v1/books/{id} : 도서 삭제 (Soft Delete, 인증 및 도서 소유자만 가능)
+```
 API 요청 시 Authorization: Bearer <JWT_TOKEN> 헤더에 로그인 시 발급받은 JWT 토큰을 포함해야 합니다.
