@@ -71,9 +71,9 @@ src
 ├── BookService.java
 └── UserService.java
 └── resources
-├── static                                 # 정적 리소스 (프론트엔드 빌드 파일 배포 시 사용)
-├── templates                              # Thymeleaf 등 템플릿 파일 (현재 사용 안 함)
-└── application.yml                        # 애플리케이션 설정 파일 (DB, JWT, Redis 등)
+├── static                     # 정적 리소스 (프론트엔드 빌드 파일 배포 시 사용)
+├── templates                  # Thymeleaf 등 템플릿 파일 (현재 사용 안 함)
+└── application.yml            # 애플리케이션 설정 파일 (DB, JWT, Redis 등)
 ```
 
 ## 🛠️ 개발 환경 설정
