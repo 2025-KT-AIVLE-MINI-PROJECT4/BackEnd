@@ -104,6 +104,24 @@ src
                 sudo service redis-server status
                 ```
             * WSL을 재시작할 때마다 `sudo service redis-server start` 명령어를 실행하여 Redis 서버를 수동으로 시작해야 합니다.
+    * **Redis CLI를 이용한 접속 및 데이터 확인:**
+        * Redis 서버가 실행 중인 상태에서 WSL 터미널에서 다음 명령어를 입력하여 Redis CLI에 접속합니다.
+            ```bash
+            redis-cli
+            ```
+        * Redis CLI 프롬프트(`127.0.0.1:6379>`)가 나타나면 다음 명령어를 사용하여 데이터를 확인할 수 있습니다.
+            * 모든 키 조회:
+                ```redis
+                KEYS *
+                ```
+            * 특정 키의 값 조회 (예: `Spring:session:expires:12345...` 와 같은 세션 키):
+                ```redis
+                GET [조회할_키_이름]
+                ```
+            * CLI 종료:
+                ```redis
+                QUIT
+                ```
 4.  **환경 변수 설정:**
     * `src/main/resources/application.yml` 파일에 다음 내용이 올바르게 설정되어 있는지 확인합니다.
         ```yaml
