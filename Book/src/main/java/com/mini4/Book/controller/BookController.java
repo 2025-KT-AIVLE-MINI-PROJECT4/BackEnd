@@ -84,7 +84,7 @@ public class BookController {
 
     // 모든 도서 목록 조회 API (페이징 제거)
     @GetMapping
-    public ResponseEntity<ApiResponse<BookListResponseDto>> getAllBooks() { // 파라미터 제거
+    public ResponseEntity<ApiResponse<BookListResponseDto>> getAllBooks() {
         try {
             List<BookResponseDto> books = bookService.getAllBooks();
             // BookListResponseDto 생성자가 List<BookResponseDto>를 받도록 수정되었으므로, 직접 전달

@@ -50,8 +50,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // H2 콘솔 접근 허용
                         .requestMatchers("/h2-console/**").permitAll()
-                        // 로그인, 회원가입, 로그아웃 API 허용
-                        .requestMatchers("/api/v1/users/register", "/api/v1/users/login", "/api/v1/users/logout").permitAll()
+                        // 로그인, 회원가입 API 허용
+                        .requestMatchers("/api/v1/users/register", "/api/v1/users/login").permitAll()
                         // 전체 도서 목록 조회 (GET /api/v1/books) 허용
                         .requestMatchers(HttpMethod.GET, "/api/v1/books").permitAll()
                         // 특정 도서 상세 조회 (GET /api/v1/books/{id}) 허용
