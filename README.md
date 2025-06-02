@@ -150,6 +150,7 @@ src
 ```
 POST /api/v1/auth/register : 사용자 회원가입
 POST /api/v1/auth/login : 사용자 로그인 (JWT 토큰 발급)
+POST /api/v1/auth/logout : 사용자 로그아웃 (인증 필요)
 ```
 * 도서 관리:
 ```
